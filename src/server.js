@@ -1,8 +1,8 @@
 import express from 'express';
 import 'dotenv/config';
-import alunoRoutes from './routes/alunoRoute.js';
-import fotoRoutes from './routes/fotoRoute.js'
-import pdfRoutes from './routes/pdfRoute.js'
+import alunosRoutes from './routes/alunoRoute.js';
+import fotosRoutes from './routes/fotoRoute.js';
+import pdfRoutes from './routes/pdfRoute.js';
 
 const app = express();
 app.use(express.json());
@@ -14,10 +14,10 @@ app.get('/', (req, res) => {
 });
 
 // Rotas
-app.use('/alunos', alunoRoutes);
-app.use('/alunos', fotoRoutes);
+app.use('/alunos', fotosRoutes);
 app.use('/alunos', pdfRoutes);
-app.use('/uploads', express.static('uploadss'));
+app.use('/alunos', alunosRoutes);
+app.use('/upload', express.static('upload'));
 
 app.use((req, res) => {
     res.status(404).json({ error: 'Rota não encontrada' });

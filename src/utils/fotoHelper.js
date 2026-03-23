@@ -1,21 +1,22 @@
 import sharp from 'sharp';
-import multer from 'multer';
+import multer from 'multer'; // mireware para lidar com uploads
 import fs from 'fs';
 import path from 'path';
 
-const UPLOADS_DIR = './uploads';
+const UPLOADS_DIR = './uploads'; // pasta para armazenar
 
 if (!fs.existsSync(UPLOADS_DIR)) {
-    fs.mkdirSync(UPLOADS_DIR);
+    // se não existir a pasta UPLOADS_DIR
+    fs.mkdirSync(UPLOADS_DIR); // crie a pasta
 }
 
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, UPLOADS_DIR),
+    destination: (req, file, cb) => cb(null, UPLOADS_DIR), // destino do arquivo - pasta criada acima
     filename: (req, file, cb) => {
         const ext = path.extname(file.originalname);
-        cb(null, `aluno_${req.params.id}_${Date.now()}${ext}`);
-    }
-})
+        cb(null, `aluno_${req.params.id}_${Date.now()}${ext}`); // nomeando o arquivo pelo id e data
+    },
+});
 
 export const upload = multer({ storage });
 
@@ -25,12 +26,14 @@ export async function processarFoto(filePath) {
         .jpeg({ quality: 80 })
         .toBuffer();
 
-    fs.writeFileSync(filePath, processado)
-    return filePath.replace(/\\/g, '/')
+    // redmencionando a foto e acertando a qualidade
+
+    fs.writerFileSync(filePath, processado);
+    return filePath.replace(/\\/g, '/'); // se vier http://localhost:300\\ troque o \\ por '/'
 }
 
 export function removerFoto(filePath) {
-    if (fs.existsSync(filePath)){
+    if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
     }
 }
